@@ -13,10 +13,11 @@ interpolator.fileInFile({
 	contentFile: partial,
 	placeholder: placeholder,
 	outputFile: mergeWithFile
-});
-interpolator.stringInFile({
-	sourceFile: layout,
-	content: 'STRING',
-	placeholder: placeholder,
-	outputFile: mergeWithString
+}).then(function() {
+	interpolator.stringInFile({
+		sourceFile: layout,
+		content: 'STRING',
+		placeholder: placeholder,
+		outputFile: mergeWithString
+	});
 });

@@ -57,6 +57,7 @@ module.exports = function(sourceFile, placeholder, outputFile, insertFn) {
 		});
 
 		templateStream.on('end', function() {
+			outputStream.end(); // TODO: check if there is a newline, if not, append it
 			outputStream.on('finish', function() {
 				resolve(outputFile);
 			});
