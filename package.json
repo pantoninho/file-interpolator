@@ -1,7 +1,7 @@
 {
   "name": "file-interpolator",
-  "version": "0.0.1",
-  "description": "Interpolates two files using a placeholder",
+  "version": "0.0.2",
+  "description": "Interpolates files using a placeholder",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
