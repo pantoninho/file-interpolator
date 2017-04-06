@@ -3,11 +3,10 @@ var path = require('path');
 
 var layout = path.join(__dirname, 'files/layout.hbs');
 var partial = path.join(__dirname, 'files/partial.hbs');
-var mergedWithFile = path.join(__dirname, 'file-merge');
-var placeholder = '{{{ content }}}';
+var output = path.join(__dirname, 'output.hbs');
 
-interpolator(layout, mergedWithFile, [{
-	replace: placeholder,
+interpolator(layout, output, [{
+	replace: '{{{ content }}}',
 	withFile: partial
 }, {
 	replace: '{{ bundle.js }}',
