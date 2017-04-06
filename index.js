@@ -1,1 +1,5 @@
-module.exports = require('./file-interpolator');
+
+module.exports = {
+	fileInFile: require('./interpolations/file-in-file'),
+	stringInFile: require('./interpolations/string-in-file')
+};
