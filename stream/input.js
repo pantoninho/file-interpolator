@@ -79,5 +79,4 @@ function stripTraillingLines(data) {
 	}
 
 	return stripTraillingLines(data.substring(0, data.length - 1));
-
 }

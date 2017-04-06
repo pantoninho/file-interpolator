@@ -1,37 +1,29 @@
-
 var interpolator = require('./interpolator');
 var stream = require('./stream');
 
-module.exports = function(sourceFile, outputFile, transforms) {
+module.exports = function(layoutFile, outputFile, transforms) {
 
-	var inputStream = stream.fromFile(sourceFile);
-	var outputStream = stream.toFile(outputFile);
-	transforms = createConfigurationObject(transforms);
+	var inputStream, outputStream;
+
+	inputStream = stream.fromFile(layoutFile);
+	outputStream = stream.toFile(outputFile);
+	transforms = prepareTransforms(transforms);
 
 	return interpolator(inputStream, transforms, outputStream).then(function() {
 		return outputFile;
 	});
 };
 
-function createConfigurationObject(rules) {
+function prepareTransforms(transforms) {
+	return transforms.map(function(transform) {
 
-	var transforms = {};
-
-	transforms.replace = rules.map(function(rule) {
-
-		var content;
-
-		if (!rule.replace || !(rule.with || rule.withFile)) {
-			throw 'invalid rule: ' +  rule;
+		if (!transform.replace || !(transform.with || transform.withFile) || (transform.with && transform.withFile)) {
+			throw 'Wrong transform rule: ' + transform;
 		}
 
-		content = rule.with ? stream.fromString(rule.with) : stream.fromFile(rule.withFile);
-
 		return {
-			query: rule.replace,
-			content: content
+			placeholder: transform.replace,
+			content: transform.with ? stream.fromString(transform.with) : stream.fromFile(transform.withFile)
 		};
 	});
-
-	return transforms;
 }

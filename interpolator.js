@@ -2,33 +2,30 @@ var Promise = require('bluebird');
 
 module.exports = function(inputStream, transforms, outputStream) {
 
-	if (!transforms.replace) {
-		throw 'Transforms argument needs a replace property, and that property needs to be an array';
-	}
-
 	return inputStream.read(processData).then(function() {
-		// TODO: write a trailing new line if non existing
+		// TODO: add trailing new line if non existent
 		outputStream.end();
 	});
 
 	function processData(data) {
 
-		var matches = find(data, transforms.replace);
+		transforms = findMatches(data, transforms);
 
 		// no matches were found, pipe input directly to the output
-		if (matches.length === 0) {
+		if (transforms.length === 0) {
 			return inputStream.pipe(outputStream);
 		}
+
 		// matches were found, replace them sequentially while writing into the outputstream
-		return Promise.reduce(matches, function(currentCharIndex, match) {
+		return Promise.reduce(transforms, function(currentCharIndex, transform) {
 
 			// write data that exists before the match
-			return outputStream.write(data.substring(currentCharIndex, match.at))
+			return outputStream.write(data.substring(currentCharIndex, transform.at))
 				.then(function() {
 					// pipe the content into the output stream
-					return match.content.pipe(outputStream);
+					return transform.content.pipe(outputStream);
 				}).then(function() {
-					return match.at + match.placeholder.length;
+					return transform.at + transform.placeholder.length;
 				});
 		}, 0).then(function(currentCharIndex) {
 			return outputStream.write(data.substring(currentCharIndex));
@@ -36,16 +33,14 @@ module.exports = function(inputStream, transforms, outputStream) {
 	}
 };
 
-function find(data, replaceConfig) {
+function findMatches(data, transforms) {
 
 	var matches = [];
 
-	replaceConfig.forEach(function(replace) {
-
-		var placeholderIndex;
+	transforms.forEach(function(transform) {
 
 		// check if placeholder exists in this data dump
-		placeholderIndex = data.indexOf(replace.query);
+		var placeholderIndex = data.indexOf(transform.placeholder);
 
 		// placeholder isnt included in this data dump
 		if (placeholderIndex === -1) {
@@ -54,9 +49,9 @@ function find(data, replaceConfig) {
 
 		// rule's placeholder was found
 		matches.push({
-			placeholder: replace.query,
+			placeholder: transform.placeholder,
 			at: placeholderIndex,
-			content: replace.content
+			content: transform.content
 		});
 	});
 
