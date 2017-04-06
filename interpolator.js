@@ -1,66 +1,69 @@
-var fs = require('fs');
 var Promise = require('bluebird');
 
-var ENCODING = 'utf8';
+module.exports = function(inputStream, transforms, outputStream) {
 
-module.exports = function(sourceFile, placeholder, outputFile, insertFn) {
+	if (!transforms.replace) {
+		throw 'Transforms argument needs a replace property, and that property needs to be an array';
+	}
 
-	var templateStream, outputStream;
+	return inputStream.read(processData).then(function() {
+		// TODO: write a trailing new line if non existing
+		outputStream.end();
+	});
 
-	return new Promise(function(resolve, reject) {
+	function processData(data) {
 
-		templateStream = fs.createReadStream(sourceFile, ENCODING);
-		outputStream = fs.createWriteStream(outputFile, ENCODING);
+		var matches = find(data, transforms.replace);
 
-		templateStream.on('data', function(data) {
+		// no matches were found, pipe input directly to the output
+		if (matches.length === 0) {
+			return inputStream.pipe(outputStream);
+		}
+		// matches were found, replace them sequentially while writing into the outputstream
+		return Promise.reduce(matches, function(currentCharIndex, match) {
 
-			var placeholderPos;
-
-			// check if placeholder exists in this data dump
-			placeholderPos = data.indexOf(placeholder);
-
-			// placeholder isnt included in this data dump, write it directly to the outputFile
-			if (placeholderPos === -1) {
-				outputStream.write(data);
-				return;
-			}
-
-			// placeholder is included in this datadump
-			// write data that exists before the placeholder
-			outputStream.write(data.substring(0, placeholderPos));
-
-			// pause the template stream, the next operation might take a while..
-			templateStream.pause();
-
-			// the insertFn allows the interpolator caller to decide what to insert into the placeholder
-			// the insertFn expects a promise or nothing
-			var promise = insertFn(outputStream);
-
-			if (promise) {
-				promise.then(endInterpolation);
-				return;
-			}
-
-			endInterpolation();
-
-			function endInterpolation() {
-				// when the insertFn is done..
-				// write the data that exists after the placeholder
-				outputStream.write(data.substring(placeholderPos + placeholder.length));
-				// resume the reading stream
-				templateStream.resume();
-			}
+			// write data that exists before the match
+			return outputStream.write(data.substring(currentCharIndex, match.at))
+				.then(function() {
+					// pipe the content into the output stream
+					return match.content.pipe(outputStream);
+				}).then(function() {
+					return match.at + match.placeholder.length;
+				});
+		}, 0).then(function(currentCharIndex) {
+			return outputStream.write(data.substring(currentCharIndex));
 		});
+	}
+};
 
-		templateStream.on('error', function(error) {
-			reject(error);
-		});
+function find(data, replaceConfig) {
 
-		templateStream.on('end', function() {
-			outputStream.end(); // TODO: check if there is a newline, if not, append it
-			outputStream.on('finish', function() {
-				resolve(outputFile);
-			});
+	var matches = [];
+
+	replaceConfig.forEach(function(replace) {
+
+		var placeholderIndex;
+
+		// check if placeholder exists in this data dump
+		placeholderIndex = data.indexOf(replace.query);
+
+		// placeholder isnt included in this data dump
+		if (placeholderIndex === -1) {
+			return;
+		}
+
+		// rule's placeholder was found
+		matches.push({
+			placeholder: replace.query,
+			at: placeholderIndex,
+			content: replace.content
 		});
 	});
-};
+
+	// sort finds using their index (ascending)
+	matches.sort(function(a, b) {
+		return a.at - b.at;
+	});
+
+	return matches;
+}

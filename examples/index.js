@@ -1,23 +1,20 @@
 var interpolator = require('../');
 var path = require('path');
 
-var layout = path.join(__dirname, 'files/layout');
-var partial = path.join(__dirname, 'files/partial');
-var mergeWithFile = path.join(__dirname, 'file-merge');
-var mergeWithString = path.join(__dirname, 'string-merge');
-var placeholder = '[CONTENT]';
+var layout = path.join(__dirname, 'files/layout.hbs');
+var partial = path.join(__dirname, 'files/partial.hbs');
+var mergedWithFile = path.join(__dirname, 'file-merge');
+var placeholder = '{{{ content }}}';
 
-
-interpolator.fileInFile({
-	sourceFile: layout,
-	contentFile: partial,
-	placeholder: placeholder,
-	outputFile: mergeWithFile
-}).then(function() {
-	interpolator.stringInFile({
-		sourceFile: layout,
-		content: 'STRING',
-		placeholder: placeholder,
-		outputFile: mergeWithString
-	});
+interpolator(layout, mergedWithFile, [{
+	replace: placeholder,
+	withFile: partial
+}, {
+	replace: '{{ bundle.js }}',
+	with: 'script tag with the js bundle right here'
+}, {
+	replace: '{{ bundle.css }}',
+	with: 'link tag with the css bundle right here'
+}]).then(function(outputFile) {
+	console.log('finished the inteprolation process.. outputfile:', outputFile);
 });
