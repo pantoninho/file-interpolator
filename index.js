@@ -15,15 +15,33 @@ module.exports = function(layoutFile, outputFile, transforms) {
 };
 
 function prepareTransforms(transforms) {
+
 	return transforms.map(function(transform) {
 
-		if (!transform.replace || !(transform.with || transform.withFile) || (transform.with && transform.withFile)) {
-			throw 'Wrong transform rule: ' + transform;
+		var content;
+
+		// no placeholder string specified
+		if (!transform.replace ||
+			// no placeholder replacer specified
+			((transform.with === undefined || transform.with === null) && !transform.withFile) ||
+			// both placeholder replacers specified (there can only be one)
+			(transform.with && transform.withFile)) {
+
+			throw 'Wrong transform rule: ' + JSON.stringify(transform);
+
+		}
+
+		if (transform.with !== undefined || transform.with !== null) {
+			content = stream.fromString(transform.with);
+		}
+
+		if (transform.withFile) {
+			content = stream.fromFile(transform.withFile);
 		}
 
 		return {
 			placeholder: transform.replace,
-			content: transform.with ? stream.fromString(transform.with) : stream.fromFile(transform.withFile)
+			content: content
 		};
 	});
 }

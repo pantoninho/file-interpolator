@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/pantoninho/file-interpolator#readme",
   "dependencies": {
-    "bluebird": "^3.5.0"
+    "bluebird": "^3.5.0",
+    "mkdirp": "^0.5.1"
   }
 }
