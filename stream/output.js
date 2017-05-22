@@ -20,6 +20,10 @@ function toFile(file) {
 				return createDirectories(path)
 					.then(function() {
 						stream = fs.createWriteStream(file, ENCODING);
+
+						stream.on('error', function(error) {
+							return new Error(error);
+						});
 					})
 					.then(function() {
 						return writer(stream, data);
@@ -36,14 +40,9 @@ function toFile(file) {
 }
 
 function writer(stream, data) {
-	return new Promise(function(resolve, reject) {
-
+	return new Promise(function(resolve) {
 		stream.write(data, function() {
 			resolve();
-		});
-
-		stream.on('error', function(error) {
-			reject(error);
 		});
 	});
 }

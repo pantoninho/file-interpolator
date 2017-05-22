@@ -4,7 +4,8 @@
   "description": "Interpolates files using a placeholder",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -19,5 +20,8 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "mkdirp": "^0.5.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0"
   }
 }
