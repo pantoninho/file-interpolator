@@ -4,7 +4,7 @@
   "description": "Interpolates files using a placeholder",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "lint": "eslint ."
   },
   "repository": {
@@ -22,6 +22,8 @@
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
-    "eslint": "^3.19.0"
+    "chai": "^3.5.0",
+    "eslint": "^3.19.0",
+    "mocha": "^3.4.1"
   }
 }

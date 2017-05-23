@@ -1,5 +1,5 @@
-var interpolator = require('./interpolator');
-var stream = require('./stream');
+var interpolator = require('./src/interpolator');
+var stream = require('./src/stream');
 
 module.exports = function(layoutFile, outputFile, transforms) {
 

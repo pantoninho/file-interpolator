@@ -1,4 +1,5 @@
 var Promise = require('bluebird');
+var matchFinder = require('./match-finder');
 
 module.exports = function(inputStream, transforms, outputStream) {
 
@@ -13,7 +14,7 @@ module.exports = function(inputStream, transforms, outputStream) {
 function replacer(transforms, inputStream, outputStream) {
 
 	return function(data) {
-		var matches = findMatches(data, transforms);
+		var matches = matchFinder(data, transforms);
 
 		// no matches were found, pipe input directly to the output
 		if (matches.length === 0) {
@@ -38,35 +39,4 @@ function replacer(transforms, inputStream, outputStream) {
 			return outputStream.write(data.substring(currentCharIndex));
 		});
 	};
-}
-
-function findMatches(data, transforms) {
-
-	var matches = [];
-
-	transforms.forEach(function(transform) {
-
-		// check if marker exists in this data dump
-		var marker, markerIndex;
-		marker = transform.marker;
-		markerIndex = data.indexOf(marker);
-
-		while (markerIndex !== -1) {
-			// rule's marker was found
-			matches.push({
-				marker: marker,
-				at: markerIndex,
-				content: transform.content
-			});
-
-			markerIndex = data.indexOf(marker, markerIndex + marker.length);
-		}
-	});
-
-	// sort finds using their index (ascending)
-	matches.sort(function(a, b) {
-		return a.at - b.at;
-	});
-
-	return matches;
 }
