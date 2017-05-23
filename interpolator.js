@@ -23,15 +23,18 @@ function replacer(transforms, inputStream, outputStream) {
 		// matches were found, replace them sequentially while writing into the outputstream
 		return Promise.reduce(matches, function(currentCharIndex, transform) {
 
-			// write data that exists before the match
+			// write data that exists before the current match
 			return outputStream.write(data.substring(currentCharIndex, transform.at))
 				.then(function() {
-					// pipe the content into the output stream
+					// pipe the match's content into the output stream
 					return transform.content.pipe(outputStream);
 				}).then(function() {
-					return transform.at + transform.placeholder.length;
+					// return the current char index after writing all the content
+					return transform.at + transform.marker.length;
 				});
+
 		}, 0).then(function(currentCharIndex) {
+				// write the content after the last marker
 			return outputStream.write(data.substring(currentCharIndex));
 		});
 	};
@@ -43,22 +46,21 @@ function findMatches(data, transforms) {
 
 	transforms.forEach(function(transform) {
 
-		// check if placeholder exists in this data dump
-		var placeholder, placeholderIndex;
-		placeholder = transform.placeholder;
-		placeholderIndex = data.indexOf(placeholder);
+		// check if marker exists in this data dump
+		var marker, markerIndex;
+		marker = transform.marker;
+		markerIndex = data.indexOf(marker);
 
-		while (placeholderIndex !== -1) {
-			// rule's placeholder was found
+		while (markerIndex !== -1) {
+			// rule's marker was found
 			matches.push({
-				placeholder: placeholder,
-				at: placeholderIndex,
+				marker: marker,
+				at: markerIndex,
 				content: transform.content
 			});
 
-			placeholderIndex = data.indexOf(placeholder, placeholderIndex + placeholder.length);
+			markerIndex = data.indexOf(marker, markerIndex + marker.length);
 		}
-
 	});
 
 	// sort finds using their index (ascending)

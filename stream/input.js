@@ -38,7 +38,6 @@ function fromFile(file) {
 				var stream = fs.createReadStream(file, ENCODING);
 
 				stream.on('data', function(data) {
-					console.log('PIPING DATA', data);
 					// strip trailing new lines
 					data = stripTraillingLines(data);
 					writePromise = outputStream.write(data);

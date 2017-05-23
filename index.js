@@ -28,7 +28,6 @@ function prepareTransforms(transforms) {
 			(transform.with && transform.withFile)) {
 
 			throw 'Wrong transform rule: ' + JSON.stringify(transform);
-
 		}
 
 		if (transform.with !== undefined || transform.with !== null) {
@@ -40,7 +39,7 @@ function prepareTransforms(transforms) {
 		}
 
 		return {
-			placeholder: transform.replace,
+			marker: transform.replace,
 			content: content
 		};
 	});
