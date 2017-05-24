@@ -16,13 +16,18 @@ module.exports = function(layoutFile, outputFile, transforms) {
 
 function prepareTransforms(transforms) {
 
-	return transforms.map(function(transform) {
+	var markers, streams;
+	markers = [];
+	streams = {};
 
-		var content;
+	transforms.forEach(function(transform) {
 
-		// no placeholder string specified
-		if (!transform.replace ||
-			// no placeholder replacer specified
+		var content, marker;
+		marker = transform.replace;
+
+		// no marker specified
+		if (!marker ||
+			// no marker replacer specified
 			((transform.with === undefined || transform.with === null) && !transform.withFile) ||
 			// both placeholder replacers specified (there can only be one)
 			(transform.with && transform.withFile)) {
@@ -38,9 +43,12 @@ function prepareTransforms(transforms) {
 			content = stream.fromFile(transform.withFile);
 		}
 
-		return {
-			marker: transform.replace,
-			content: content
-		};
+		markers.push(marker);
+		streams[marker] = content;
 	});
+
+	return {
+		markers: markers,
+		streamer: streams
+	};
 }
