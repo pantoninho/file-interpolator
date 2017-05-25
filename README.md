@@ -1,3 +1,9 @@
+[![Build Status](https://travis-ci.org/pantoninho/file-interpolator.svg?branch=master)](https://travis-ci.org/pantoninho/file-interpolator)
+[![Test Coverage](https://codeclimate.com/github/pantoninho/file-interpolator/badges/coverage.svg)](https://codeclimate.com/github/pantoninho/file-interpolator/coverage)
+[![Code Climate](https://codeclimate.com/github/pantoninho/file-interpolator/badges/gpa.svg)](https://codeclimate.com/github/pantoninho/file-interpolator)
+[![Issue Count](https://codeclimate.com/github/pantoninho/file-interpolator/badges/issue_count.svg)](https://codeclimate.com/github/pantoninho/file-interpolator)
+[![dependencies Status](https://david-dm.org/pantoninho/file-interpolator/status.svg)](https://david-dm.org/pantoninho/file-interpolator)
+[![devDependencies Status](https://david-dm.org/pantoninho/file-interpolator/dev-status.svg)](https://david-dm.org/pantoninho/file-interpolator?type=dev)
 # file-interpolator
 
 Interpolates a file using placeholders. The file may be interpolated with strings or the content of another file.
@@ -12,8 +18,9 @@ var path = require('path');
 
 var layout = path.join(__dirname, 'files/layout.hbs');
 var partial = path.join(__dirname, 'files/partial.hbs');
+var outputFile = path.join(__dirname, 'files/output.hbs');
 
-interpolator(layout, 'output.hbs', [{
+interpolator(layout, [{
 	replace: '{{{ content }}}',
 	withFile: partial
 }, {
@@ -22,7 +29,7 @@ interpolator(layout, 'output.hbs', [{
 }, {
 	replace: '{{ bundle.css }}',
 	with: 'link tag with the css bundle right here'
-}]).then(function(outputFile) {
+}], outputFile).then(function(outputFile) {
 	console.log('finished the inteprolation process.. outputfile:', outputFile);
 });
 

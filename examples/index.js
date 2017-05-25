@@ -5,7 +5,7 @@ var layout = path.join(__dirname, 'files/layout.hbs');
 var partial = path.join(__dirname, 'files/partial.hbs');
 var output = path.join(__dirname, 'output.hbs');
 
-interpolator(layout, output, [{
+interpolator(layout, [{
 	replace: '{{{ content }}}',
 	withFile: partial
 }, {
@@ -14,6 +14,6 @@ interpolator(layout, output, [{
 }, {
 	replace: '{{ bundle.css }}',
 	with: 'link tag with the css bundle right here'
-}]).then(function(outputFile) {
+}], output).then(function(outputFile) {
 	console.log('finished the inteprolation process.. outputfile:', outputFile);
 });
