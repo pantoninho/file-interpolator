@@ -5,6 +5,23 @@ var matchFinder = require('../src/match-finder');
 
 describe('[Match finder]', function() {
 
+	describe('No matches at all', function() {
+		it('should return an empty array', function() {
+
+			var markers, text, matches;
+
+			markers = [
+				'gibberish'
+			];
+
+			text = 'Once upon a time, there was this placeholder. And it was cool.';
+			matches = matchFinder(text, markers);
+
+			matches.should.be.an('array');
+			matches.should.have.lengthOf(0);
+		});
+	});
+
 	describe('One full match without partial matches', function() {
 		it('should return an array with a full match', function() {
 

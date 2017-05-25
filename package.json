@@ -4,7 +4,9 @@
   "description": "Interpolates files using a placeholder",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha",
+    "test": "mocha --recursive",
+    "cover": "istanbul cover _mocha -- --recursive",
+    "codeclimate": "npm run cover && codeclimate-test-reporter < coverage/lcov.info",
     "lint": "eslint ."
   },
   "repository": {
@@ -24,8 +26,14 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+	"codeclimate-test-reporter": "^0.4.1",
+    "codecov": "^2.2.0",
     "eslint": "^3.19.0",
+    "istanbul": "^0.4.5",
     "mocha": "^3.4.1",
-    "nyc": "^10.3.2"
+    "npm": "^4.6.1",
+    "nyc": "^10.3.2",
+    "sinon-chai": "^2.10.0"
   }
 }

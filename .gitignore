@@ -1,4 +1,6 @@
 examples/output
+test/files/output
+test/files/large_output
 
 # Created by https://www.gitignore.io/api/osx,node
 
