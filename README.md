@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9fa1f23dce98478cb9607af44ed869ca)](https://www.codacy.com/app/pdn.antoninho/file-interpolator?utm_source=github.com&utm_medium=referral&utm_content=pantoninho/file-interpolator&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/pantoninho/file-interpolator.svg?branch=master)](https://travis-ci.org/pantoninho/file-interpolator)
 [![Test Coverage](https://codeclimate.com/github/pantoninho/file-interpolator/badges/coverage.svg)](https://codeclimate.com/github/pantoninho/file-interpolator/coverage)
 [![Code Climate](https://codeclimate.com/github/pantoninho/file-interpolator/badges/gpa.svg)](https://codeclimate.com/github/pantoninho/file-interpolator)
