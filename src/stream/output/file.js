@@ -29,7 +29,7 @@ exports.end = function() {
 	var stream = this.stream;
 
 	if (!stream) {
-		throw new Error('Stream not initiated');
+		return;
 	}
 
 	stream.end();
@@ -58,7 +58,13 @@ function initStream(file) {
 				return new Error(error);
 			});
 
-			return stream;
+			return new Promise(function(resolve) {
+
+				stream.on('open', function() {
+					resolve(stream);
+				});
+
+			});
 		});
 }
 

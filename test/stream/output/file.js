@@ -59,7 +59,7 @@ describe('[File Output Stream]', function() {
 
 	});
 
-	it('should throw exception if trying to end an unexistent stream', function() {
+	it('should do nothing if trying to end an unexistent stream', function() {
 
 		fileStream = stream.toFile(outputFile);
 
@@ -67,7 +67,7 @@ describe('[File Output Stream]', function() {
 			fileStream.end();
 		};
 
-		handler.should.throw(Error, 'Stream not initiated');
+		handler.should.not.throw(Error);
 
 	});
 });

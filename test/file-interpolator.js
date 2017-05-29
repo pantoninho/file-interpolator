@@ -55,7 +55,7 @@ describe('[File-Interpolator]', function() {
 
 	});
 
-	it('should replace placeholders on gigantic propotions', function() {
+	it('should replace placeholders on files with gigantic propotions', function() {
 		this.timeout(0);
 
 		var input, output, transforms, partial1, partial2;
