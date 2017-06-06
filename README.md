@@ -4,6 +4,7 @@
 [![Issue Count](https://codeclimate.com/github/pantoninho/file-interpolator/badges/issue_count.svg)](https://codeclimate.com/github/pantoninho/file-interpolator)
 [![dependencies Status](https://david-dm.org/pantoninho/file-interpolator/status.svg)](https://david-dm.org/pantoninho/file-interpolator)
 [![devDependencies Status](https://david-dm.org/pantoninho/file-interpolator/dev-status.svg)](https://david-dm.org/pantoninho/file-interpolator?type=dev)
+
 # file-interpolator
 
 Interpolates a file using placeholders. The file may be interpolated with strings or the content of another file.

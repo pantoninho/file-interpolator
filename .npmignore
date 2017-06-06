@@ -1,0 +1,5 @@
+.node-modules
+coverage
+.nyc_output
+examples
+test
