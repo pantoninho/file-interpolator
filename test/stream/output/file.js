@@ -36,7 +36,6 @@ describe('[File Output Stream]', function() {
 
 		fileStream = stream.toFile(outputFile);
 
-
 		return fileStream.write(data)
 			.then(function() {
 				fileStream.write(moreData);
