@@ -1,6 +1,6 @@
 {
   "name": "file-interpolator",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Interpolates files using a placeholder",
   "main": "index.js",
   "scripts": {
